@@ -84,11 +84,13 @@ def main():
             for r in results:
                 if r.status_code != 303:
                     print('ERROR: %s %s' % (r.url, r.status_code))
+                    errors += 1
                 elif r.headers['location'] not in urls[r.url]:
                     print(
                         'ERROR: %s %s != %s' %
                         (r.url, r.headers['location'], list(urls[r.url]))
                     )
+                    errors += 1
                 elif options.verbose:
                     print('SUCCESS: %s %s' % (r.url, r.status_code))
         except Exception as e:
