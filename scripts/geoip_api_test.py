@@ -208,6 +208,7 @@ def main():
         print('NOTICE: validating responses')
 
     # validate results
+    error = 0
     success = 0
     for country, results in results_by_country.iteritems():
         for result in results:
@@ -220,7 +221,7 @@ def main():
                         result.status_code,
                     )
                 )
-                errors += 1
+                error += 1
             elif result.headers['location'] not in countries[country][result.url]:
                 print(
                     'ERROR: %s (%s) %s != %s' %
@@ -231,7 +232,7 @@ def main():
                         countries[country][result.url]
                     )
                 )
-                errors += 1
+                error += 1
             elif options.verbose:
                 print(
                     'SUCCESS: %s (%s) %s' %
@@ -248,7 +249,9 @@ def main():
     if not options.quiet:
         print('NOTICE: validated %s responses' % (success + error))
         print('NOTICE: %s valid responses' % success)
-        print('NOTICE: %s invalid responses' % errors)
+        print('NOTICE: %s invalid responses' % error)
+
+    errors += error
 
     if errors:
         exit(1)
