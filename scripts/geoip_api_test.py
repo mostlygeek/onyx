@@ -74,6 +74,7 @@ def main():
 
     cdn = options.cdn
     onyx = options.onyx
+    errors = 0
 
     if not options.channels:
         options.channels = ['desktop']
@@ -109,6 +110,7 @@ def main():
         try:
             if index.status_code != 200:
                 print('ERROR: %s %s' % (index.url, index.status_code))
+                errors += 1
             elif options.verbose:
                 print('SUCCESS: %s %s' % (index.url, index.status_code))
 
@@ -132,6 +134,7 @@ def main():
                     countries[country][url] = value['ag']
         except Exception as e:
             print('ERROR: %s' % e)
+            errors += 1
 
     if not options.quiet:
         print('NOTICE: calculated %s urls' % sum(len(urls) for urls in countries.values()))
@@ -205,7 +208,6 @@ def main():
         print('NOTICE: validating responses')
 
     # validate results
-    error = 0
     success = 0
     for country, results in results_by_country.iteritems():
         for result in results:
@@ -218,7 +220,7 @@ def main():
                         result.status_code,
                     )
                 )
-                error += 1
+                errors += 1
             elif result.headers['location'] not in countries[country][result.url]:
                 print(
                     'ERROR: %s (%s) %s != %s' %
@@ -229,7 +231,7 @@ def main():
                         countries[country][result.url]
                     )
                 )
-                error += 1
+                errors += 1
             elif options.verbose:
                 print(
                     'SUCCESS: %s (%s) %s' %
@@ -246,7 +248,10 @@ def main():
     if not options.quiet:
         print('NOTICE: validated %s responses' % (success + error))
         print('NOTICE: %s valid responses' % success)
-        print('NOTICE: %s invalid responses' % error)
+        print('NOTICE: %s invalid responses' % errors)
+
+    if errors:
+        exit(1)
 
 
 if __name__ == '__main__':
