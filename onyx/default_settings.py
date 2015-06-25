@@ -9,11 +9,11 @@ class DefaultConfig(object):
     """
     Configuration suitable for use for development
     """
-    DEBUG = True
-    APPLICATION_ROOT = None
-    JSONIFY_PRETTYPRINT_REGULAR = True
+    DEBUG = bool(os.getenv('DEBUG', 'True'))
+    APPLICATION_ROOT = os.getenv('APPLICATION_ROOT')
+    JSONIFY_PRETTYPRINT_REGULAR = bool(os.getenv('JSONIFY_PRETTYPRINT_REGULAR', 'True'))
 
-    STATIC_ENABLED_ENVS = {'dev', 'test'}
+    STATIC_ENABLED_ENVS = set(os.getenv('STATIC_ENABLED_ENVS', 'dev test').split(' '))
 
     TILE_INDEX_FILES = {
         "desktop": "/var/data/onyx/desktop_tile_index.json",
