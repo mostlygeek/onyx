@@ -16,9 +16,9 @@ class DefaultConfig(object):
     STATIC_ENABLED_ENVS = set(os.getenv('STATIC_ENABLED_ENVS', 'dev test').split(' '))
 
     TILE_INDEX_FILES = {
-        "desktop": "/var/data/onyx/desktop_tile_index.json",
-        "desktop-prerelease": "/var/data/onyx/desktop-prerelease_tile_index.json",
-        "android": "/var/data/onyx/android_tile_index.json"
+        'desktop': os.getenv('TILE_INDEX_FILES_DESKTOP', '/var/data/onyx/desktop_tile_index.json'),
+        'desktop-prerelease': os.getenv('TILE_INDEX_FILES_DESKTOP_PRERELEASE', '/var/data/onyx/desktop-prerelease_tile_index.json'),
+        'android': os.getenv('TILE_INDEX_FILES_ANDROID', '/var/data/onyx/android_tile_index.json'),
     }
 
     ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
