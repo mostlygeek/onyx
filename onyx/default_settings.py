@@ -23,16 +23,10 @@ class DefaultConfig(object):
 
     ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
 
-    # defaults to {'desktop':None,'desktop-prerelease':None,'android':None}
-    # env format is LINKS_LOCALIZATIONS='key1=value1 key2= key3=value3' which
-    # converts to {'key1': 'value1', 'key2': None, 'key3': 'value3'}
     LINKS_LOCALIZATIONS = {
-        key: (value or None)
-        for pair in os.getenv(
-            'LINKS_LOCALIZATIONS',
-            'desktop= desktop-prerelease= android=',
-        ).split(' ')
-        for key, value in [pair.split('=')]
+        'desktop': os.getenv('LINKS_LOCALIZATIONS_DESKTOP'),
+        'desktop-prerelease': os.getenv('LINKS_LOCALIZATIONS_DESKTOP_PRERELEASE'),
+        'android': os.getenv('LINKS_LOCALIZATIONS_ANDROID'),
     }
 
     GEO_DB_FILE = os.getenv(
@@ -42,7 +36,7 @@ class DefaultConfig(object):
 
     STATSD = {
         'host': os.getenv('STATSD_HOST', '127.0.0.1'),
-        'port': int(os.getenv('STATSD_PORT', 8125),
+        'port': int(os.getenv('STATSD_PORT', 8125)),
     }
 
     LOG_HANDLERS = {
@@ -50,7 +44,10 @@ class DefaultConfig(object):
             'handler': logging.handlers.SysLogHandler,
             'level': logging.INFO,
             'params': {
-                'address': ('localhost', 514),
+                'address': (
+                    os.getenv('SYSLOG_HOST', 'localhost'),
+                    int(os.getenv('SYSLOG_PORT', 514)),
+                ),
                 'facility': logging.handlers.SysLogHandler.LOG_LOCAL0,
                 'socktype': socket.SOCK_DGRAM,
             }
@@ -59,7 +56,10 @@ class DefaultConfig(object):
             'handler': logging.handlers.SysLogHandler,
             'level': logging.INFO,
             'params': {
-                'address': ('localhost', 514),
+                'address': (
+                    os.getenv('SYSLOG_HOST', 'localhost'),
+                    int(os.getenv('SYSLOG_PORT', 514)),
+                ),
                 'facility': logging.handlers.SysLogHandler.LOG_LOCAL1,
                 'socktype': socket.SOCK_DGRAM,
             }
@@ -69,7 +69,10 @@ class DefaultConfig(object):
             'format': '%(message)s',
             'level': logging.INFO,
             'params': {
-                'address': ('localhost', 514),
+                'address': (
+                    os.getenv('SYSLOG_HOST', 'localhost'),
+                    int(os.getenv('SYSLOG_PORT', 514)),
+                ),
                 'facility': logging.handlers.SysLogHandler.LOG_LOCAL2,
                 'socktype': socket.SOCK_DGRAM,
             }
