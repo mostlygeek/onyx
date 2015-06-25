@@ -23,10 +23,16 @@ class DefaultConfig(object):
 
     ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
 
+    # defaults to {'desktop':None,'desktop-prerelease':None,'android':None}
+    # env format is LINKS_LOCALIZATIONS='key1=value1 key2= key3=value3' which
+    # converts to {'key1': 'value1', 'key2': None, 'key3': 'value3'}
     LINKS_LOCALIZATIONS = {
-        "desktop": None,
-        "desktop-prerelease": None,
-        "android": None
+        key: (value or None)
+        for pair in os.getenv(
+            'LINKS_LOCALIZATIONS',
+            'desktop= desktop-prerelease= android=',
+        ).split(' ')
+        for key, value in [pair.split('=')]
     }
 
     GEO_DB_FILE = os.getenv(
