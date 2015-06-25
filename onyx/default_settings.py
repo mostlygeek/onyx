@@ -9,9 +9,9 @@ class DefaultConfig(object):
     """
     Configuration suitable for use for development
     """
-    DEBUG = bool(os.getenv('DEBUG', 'True'))
+    DEBUG = bool(os.getenv('DEBUG', True))
     APPLICATION_ROOT = os.getenv('APPLICATION_ROOT')
-    JSONIFY_PRETTYPRINT_REGULAR = bool(os.getenv('JSONIFY_PRETTYPRINT_REGULAR', 'True'))
+    JSONIFY_PRETTYPRINT_REGULAR = bool(os.getenv('JSONIFY_PRETTYPRINT_REGULAR', True))
 
     STATIC_ENABLED_ENVS = set(os.getenv('STATIC_ENABLED_ENVS', 'dev test').split(' '))
 
