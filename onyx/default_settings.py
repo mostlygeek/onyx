@@ -9,30 +9,34 @@ class DefaultConfig(object):
     """
     Configuration suitable for use for development
     """
-    DEBUG = True
-    APPLICATION_ROOT = None
-    JSONIFY_PRETTYPRINT_REGULAR = True
+    DEBUG = bool(os.getenv('DEBUG', True))
+    APPLICATION_ROOT = os.getenv('APPLICATION_ROOT')
+    JSONIFY_PRETTYPRINT_REGULAR = bool(os.getenv('JSONIFY_PRETTYPRINT_REGULAR', True))
 
-    STATIC_ENABLED_ENVS = {'dev', 'test'}
+    STATIC_ENABLED_ENVS = set(os.getenv('STATIC_ENABLED_ENVS', 'dev test').split(' '))
 
     TILE_INDEX_FILES = {
-        "desktop": "/var/data/onyx/desktop_tile_index.json",
-        "desktop-prerelease": "/var/data/onyx/desktop-prerelease_tile_index.json",
-        "android": "/var/data/onyx/android_tile_index.json"
+        'desktop': os.getenv('TILE_INDEX_FILES_DESKTOP', '/var/data/onyx/desktop_tile_index.json'),
+        'desktop-prerelease': os.getenv('TILE_INDEX_FILES_DESKTOP_PRERELEASE', '/var/data/onyx/desktop-prerelease_tile_index.json'),
+        'android': os.getenv('TILE_INDEX_FILES_ANDROID', '/var/data/onyx/android_tile_index.json'),
     }
 
-    ENVIRONMENT = 'dev'
+    ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
+
     LINKS_LOCALIZATIONS = {
-        "desktop": None,
-        "desktop-prerelease": None,
-        "android": None
+        'desktop': os.getenv('LINKS_LOCALIZATIONS_DESKTOP'),
+        'desktop-prerelease': os.getenv('LINKS_LOCALIZATIONS_DESKTOP_PRERELEASE'),
+        'android': os.getenv('LINKS_LOCALIZATIONS_ANDROID'),
     }
 
-    GEO_DB_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data/GeoLite2-Country.mmdb")
+    GEO_DB_FILE = os.getenv(
+        'GEO_DB_FILE',
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "data/GeoLite2-Country.mmdb")
+    )
 
     STATSD = {
-        'host': 'localhost',
-        'port': 8125,
+        'host': os.getenv('STATSD_HOST', '127.0.0.1'),
+        'port': int(os.getenv('STATSD_PORT', 8125)),
     }
 
     LOG_HANDLERS = {
@@ -40,7 +44,10 @@ class DefaultConfig(object):
             'handler': logging.handlers.SysLogHandler,
             'level': logging.INFO,
             'params': {
-                'address': ('localhost', 514),
+                'address': (
+                    os.getenv('SYSLOG_HOST', 'localhost'),
+                    int(os.getenv('SYSLOG_PORT', 514)),
+                ),
                 'facility': logging.handlers.SysLogHandler.LOG_LOCAL0,
                 'socktype': socket.SOCK_DGRAM,
             }
@@ -49,7 +56,10 @@ class DefaultConfig(object):
             'handler': logging.handlers.SysLogHandler,
             'level': logging.INFO,
             'params': {
-                'address': ('localhost', 514),
+                'address': (
+                    os.getenv('SYSLOG_HOST', 'localhost'),
+                    int(os.getenv('SYSLOG_PORT', 514)),
+                ),
                 'facility': logging.handlers.SysLogHandler.LOG_LOCAL1,
                 'socktype': socket.SOCK_DGRAM,
             }
@@ -59,7 +69,10 @@ class DefaultConfig(object):
             'format': '%(message)s',
             'level': logging.INFO,
             'params': {
-                'address': ('localhost', 514),
+                'address': (
+                    os.getenv('SYSLOG_HOST', 'localhost'),
+                    int(os.getenv('SYSLOG_PORT', 514)),
+                ),
                 'facility': logging.handlers.SysLogHandler.LOG_LOCAL2,
                 'socktype': socket.SOCK_DGRAM,
             }
