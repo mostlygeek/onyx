@@ -21,18 +21,22 @@ class DefaultConfig(object):
         "android": "/var/data/onyx/android_tile_index.json"
     }
 
-    ENVIRONMENT = 'dev'
+    ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
+
     LINKS_LOCALIZATIONS = {
         "desktop": None,
         "desktop-prerelease": None,
         "android": None
     }
 
-    GEO_DB_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data/GeoLite2-Country.mmdb")
+    GEO_DB_FILE = os.getenv(
+        'GEO_DB_FILE',
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "data/GeoLite2-Country.mmdb")
+    )
 
     STATSD = {
-        'host': 'localhost',
-        'port': 8125,
+        'host': os.getenv('STATSD_HOST', '127.0.0.1'),
+        'port': int(os.getenv('STATSD_PORT', 8125),
     }
 
     LOG_HANDLERS = {
